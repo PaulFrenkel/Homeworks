@@ -15,7 +15,26 @@ class Student:
                 lecturer.grades[course] = [grade]
         else:
             return "Ошибка"
+
+    def av_rating(self):
+        sum_rating = 0
+        len_rating = 0
+        for course in self.grades.values():
+            sum_rating += sum(course)
+            len_rating += len(course)
+        average_rating = round(sum_rating / len_rating, 2)
+        return average_rating
         
+    def __str__(self):
+        res = f'Имя: {self.name}\nФамилия: {self.surname}\nСредняя оценка за домашние задания: {self.av_rating()}\nКурсы в процессе изучения: {", ".join(self.courses_in_progress)}\nЗавершенные курсы: {", ".join(self.finished_courses)}'
+        return res
+
+    def __lt__(self, other):
+        if not isinstance(other, Student):
+            print("Ошибка")
+            return
+        return self.av_rating() < other.av_rating()
+
 class Mentor:
     def __init__(self, name, surname):
         self.name = name
@@ -26,6 +45,25 @@ class Lecturer(Mentor):
     def __init__(self, name, surname):
         super().__init__(name, surname)
         self.grades = {}
+
+    def av_rating(self):
+        sum_rating = 0
+        len_rating = 0
+        for course in self.grades.values():
+            sum_rating += sum(course)
+            len_rating += len(course)
+        average_rating = round(sum_rating / len_rating, 2)
+        return average_rating
+
+    def __str__(self):
+        res = f"Имя: {self.name}\nФамилия: {self.surname}\nСредняя оценка за лекции: {self.av_rating()}"
+        return res
+
+    def __lt__(self, other):
+        if not isinstance(other, Lecturer):
+            print("Ошибка")
+            return
+        return self.av_rating() < other.av_rating()    
 
 class Reviewer(Mentor):
     def __init__(self, name, surname):
@@ -41,7 +79,11 @@ class Reviewer(Mentor):
                 student.grades[course] = [grade]
         else:
             return 'Ошибка'
-            
+
+    def __str__(self):
+        res = f'Имя: {self.name} \nФамилия: {self.surname}'
+        return res
+
 best_student = Student('Ruoy', 'Eman', 'your_gender')
 best_student.courses_in_progress += ['Python']
  
