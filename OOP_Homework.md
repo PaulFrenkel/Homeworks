@@ -35,6 +35,16 @@ class Student:
             return
         return self.av_rating() < other.av_rating()
 
+    def av_rating_for_course(self, course):
+        sum_rating = 0
+        len_rating = 0
+        for lesson in self.grades.keys():
+            if lesson == course:
+                sum_rating += sum(self.grades[course])
+                len_rating += len(self.grades[course])
+        average_rating = round(sum_rating / len_rating, 2)
+        return average_rating    
+
 class Mentor:
     def __init__(self, name, surname):
         self.name = name
@@ -63,7 +73,17 @@ class Lecturer(Mentor):
         if not isinstance(other, Lecturer):
             print("Ошибка")
             return
-        return self.av_rating() < other.av_rating()    
+        return self.av_rating() < other.av_rating()
+
+    def av_rating_for_course(self, course):
+        sum_rating = 0
+        len_rating = 0
+        for lesson in self.grades.keys():
+            if lesson == course:
+                sum_rating += sum(self.grades[course])
+                len_rating += len(self.grades[course])
+        average_rating = round(sum_rating / len_rating, 2)
+        return average_rating       
 
 class Reviewer(Mentor):
     def __init__(self, name, surname):
@@ -84,14 +104,66 @@ class Reviewer(Mentor):
         res = f'Имя: {self.name} \nФамилия: {self.surname}'
         return res
 
-best_student = Student('Ruoy', 'Eman', 'your_gender')
-best_student.courses_in_progress += ['Python']
+[Студенты]: #
+student_1 = Student('Sean', 'Paul', 'Male')
+student_1.courses_in_progress += ['Python']
+student_1.finished_courses += ["ООП"]
+
+student_2 = Student('Jessica', 'Alba', 'Female')
+student_2.courses_in_progress += ['Python']
+student_2.finished_courses += ["ООП"]
+
+[Лекторы]: #
+lecturer_1 = Lecturer('Khal', 'Drogo')
+lecturer_1.courses_attached += ['Python']
  
-cool_mentor = Mentor('Some', 'Buddy')
-cool_mentor.courses_attached += ['Python']
+lecturer_2 = Lecturer('Sansa', 'Stark')
+lecturer_2.courses_attached += ['Python']
+
+[Проверяющие]: #
+reviewer_1 = Reviewer('Leonardo', 'Dicaprio')
+reviewer_1.courses_attached += ['Python']
  
-cool_mentor.rate_hw(best_student, 'Python', 10)
-cool_mentor.rate_hw(best_student, 'Python', 10)
-cool_mentor.rate_hw(best_student, 'Python', 10)
- 
-print(best_student.grades)
+reviewer_2 = Reviewer('Mark', 'Wahlberg')
+reviewer_2.courses_attached += ['Python']
+
+[Оценки студентам]: #
+reviewer_1.rate_hw(student_1, 'Python', 1)
+reviewer_1.rate_hw(student_1, 'Python', 4)
+reviewer_1.rate_hw(student_1, 'Python', 9)
+
+reviewer_2.rate_hw(student_2, 'Python', 6)
+reviewer_2.rate_hw(student_2, 'Python', 3)
+reviewer_2.rate_hw(student_2, 'Python', 10)
+
+[Оценки лекторам]: #
+student_1.rate_lection(lecturer_1, 'Python', 7)
+student_1.rate_lection(lecturer_1, 'Python', 2)
+student_1.rate_lection(lecturer_1, 'Python', 1)
+
+student_2.rate_lection(lecturer_2, 'Python', 10)
+student_2.rate_lection(lecturer_2, 'Python', 10)
+student_2.rate_lection(lecturer_2, 'Python', 10)
+
+student_list = [student_1, student_2]
+lecturer_list = [lecturer_1, lecturer_2]
+reviewer_list = [reviewer_1, reviewer_2]
+
+def average_rating_for_course(course, student_list):
+    sum_rating = 0
+    quantity_rating = 0
+    for stud in student_list:
+        for course in stud.grades:
+            stud_sum_rating = stud.av_rating_for_course(course)
+            sum_rating += stud_sum_rating
+            quantity_rating += 1
+    average_rating = round(sum_rating / quantity_rating, 2)
+    return average_rating
+
+
+print(average_rating_for_course('Python', student_list))
+print(average_rating_for_course('Python', lecturer_list))
+print(student_1)
+print(student_2)
+print(lecturer_1)
+print(lecturer_2)
